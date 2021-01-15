@@ -11,16 +11,16 @@ defmodule Servy.Handler do
     request
     |> parse()
     |> rewrite_path()
-    |>log()
+    |> log()
     |> route()
     |> format_response()
   end
 
   def rewrite_path(conv) do
-    %{ conv | path: "/wildthings" }
+    %{conv | path: "/wildthings"}
   end
 
-  def log(conv), do: IO.inspect conv
+  def log(conv), do: IO.inspect(conv)
 
   def parse(request) do
     [method, path, _] =
@@ -29,28 +29,24 @@ defmodule Servy.Handler do
       |> List.first()
       |> String.split(" ")
 
-    %{method: method,
-    path: path,
-    resp_body: "",
-    status: nil
-  }
+    %{method: method, path: path, resp_body: "", status: nil}
   end
 
   def route(conv) do
-   route(conv, conv.method, conv.path)
+    route(conv, conv.method, conv.path)
   end
 
- def route(conv, "GET", "/wildthings") do
-    %{conv | status: 200, resp_body: "Bears, Lions, Tigers" }
- end
+  def route(conv, "GET", "/wildthings") do
+    %{conv | status: 200, resp_body: "Bears, Lions, Tigers"}
+  end
 
- def route(conv, "GET", "/bears") do
-    %{ conv | status: 200, resp_body: "teddy, Smokey, Paddington" }
- end
+  def route(conv, "GET", "/bears") do
+    %{conv | status: 200, resp_body: "teddy, Smokey, Paddington"}
+  end
 
- def route(conv, "GET", "/bears/" <> id) do
-  %{ conv | status: 200, resp_body: "bear #{id}" }
- end
+  def route(conv, "GET", "/bears/" <> id) do
+    %{conv | status: 200, resp_body: "bear #{id}"}
+  end
 
   def route(conv, _method, path) do
     %{conv | status: 404, resp_body: "No #{path} here!"}
@@ -90,7 +86,6 @@ Accept: */*
 response = Servy.Handler.handle(request)
 IO.puts(response)
 
-
 request = """
 GET /bigfoot HTTP/1.1
 Host: example.com
@@ -101,7 +96,6 @@ Accept: */*
 
 response = Servy.Handler.handle(request)
 IO.puts(response)
-
 
 request = """
 GET /bears HTTP/1.1
@@ -135,8 +129,6 @@ Accept: */*
 
 response = Servy.Handler.handle(request)
 IO.puts(response)
-
-
 
 # When you open a website, the server receive a request right?  When you type the name google.com, a request is send from your browser to a server listening to port 80 or 443, when the site have a ssl certificat, its 443.
 # the request received, activate the server to return the page for you
