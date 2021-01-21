@@ -1,5 +1,4 @@
 defmodule Servy.Handler do
-
   @moduledoc "Handlers HTTP request."
 
   alias Servy.Conv
@@ -28,7 +27,6 @@ defmodule Servy.Handler do
     |> format_response()
   end
 
-
   def route(%Conv{method: "GET", path: "/wildthings"} = conv) do
     %{conv | status: 200, resp_body: "Bears, Lions, Tigers"}
   end
@@ -37,11 +35,11 @@ defmodule Servy.Handler do
     %{conv | status: 200, resp_body: "Teady, Smokey, Paddington"}
   end
 
+  # name=Baloo&type=brown
   def route(%Conv{method: "GET", path: "/bears/" <> id} = conv) do
-    %{conv | status: 200, resp_body: "Bear #{id}"}
+    params = %{"name" => "baloo", "type" => "brown"}
+    %{conv | status: 201, resp_body: "Created a #{params["type"]} bear named #{params["name"]}!"}
   end
-
-
 
   def route(%Conv{method: "GET", path: "/about"} = conv) do
     @pages_path
@@ -50,8 +48,8 @@ defmodule Servy.Handler do
     |> handle_file(conv)
   end
 
-  def route(%Conv{ path: path } = conv) do
-    %{ conv | status: 404, resp_body: "No #{path} here!"}
+  def route(%Conv{path: path} = conv) do
+    %{conv | status: 404, resp_body: "No #{path} here!"}
   end
 
   def handle_file({:ok, content}, conv) do
@@ -66,13 +64,13 @@ defmodule Servy.Handler do
     %{conv | status: 500, resp_body: "File error: #{reason}"}
   end
 
-   def format_response(%Conv{} = conv) do
-
-  # TODO: Use values in the map to create an HTTP response string:
+  # def format_response(%Conv{} = conv) do
+  #   # TODO: Use values in the map to create an HTTP response string:
+  # end
   def format_response(%Conv{} = conv) do
     """
-    HTTP/1.1 #{conv.status} #{status_reason(conv.status)}
-    Content-Type: text/html
+    HTTP/1.1 #{Conv.full_status(conv)}
+    Content-Type: text/
     Content-length: #{String.length(conv.resp_body)}
 
     #{conv.resp_body}
@@ -80,73 +78,71 @@ defmodule Servy.Handler do
   end
 end
 
-  defp status_reason(code) do
-    %{
-      200 => "Ok",
-      201 => "Created",
-      401 => "Unhotorized",
-      403 => "Forbidden",
-      404 => "Not Found",
-      500 => "Internal Server Error"
-    }[code]
-  end
+# request = """
+# GET /bears HTTP/1.1
+# Host: example.com
+# User-Agent: ExampleBrowser/1.0
+# Accept: */*
 
+# """
+
+# response = Servy.Handler.handle(request)
+# IO.puts(response)
+
+# request = """
+# GET /bigfoot HTTP/1.1
+# Host: example.com
+# User-Agent: ExampleBrowser/1.0
+# Accept: */*
+
+# """
+
+# request = """
+# GET /bears/1 HTTP/1.1
+# Host: example.com
+# User-Agent: ExampleBrowser/1.0
+# Accept: */*
+
+# """
+
+# response = Servy.Handler.handle(request)
+# IO.puts(response)
+
+# request = """
+# GET /wildlife HTTP/1.1
+# Host: example.com
+# User-Agent: ExampleBrowser/1.0
+# Accept: */*
+
+# """
+
+# response = Servy.Handler.handle(request)
+
+# IO.puts(response)
+
+# request = """
+# GET /about HTTP/1.1
+# Host: example.com
+# User-Agent: ExampleBrowser/1.0
+# Accept: */*
+
+# """
+
+# response = Servy.Handler.handle(request)
+# IO.puts(response)
 
 request = """
-GET /wildthings HTTP/1.1
+POST /bears HTTP/1.1
 Host: example.com
 User-Agent: ExampleBrowser/1.0
 Accept: */*
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 21
 
+name=Baloo&type=Brown
 """
 
 response = Servy.Handler.handle(request)
-IO.puts(response)
-
-response = Servy.Handler.handle(request)
-IO.puts(response)
-
-request = """
-GET /bears HTTP/1.1
-Host: example.com
-User-Agent: ExampleBrowser/1.0
-Accept: */*
-
-name=Baloo&type=brown
-"""
-
-response = Servy.Handler.handle(request)
-IO.puts(response)
-
-request = """
-GET /bigfoot HTTP/1.1
-Host: example.com
-User-Agent: ExampleBrowser/1.0
-Accept: */*
-
-"""
-
-request = """
-GET /bears/1 HTTP/1.1
-Host: example.com
-User-Agent: ExampleBrowser/1.0
-Accept: */*
-
-"""
-
-response = Servy.Handler.handle(request)
-IO.puts(response)
-
-request = """
-GET /wildlife HTTP/1.1
-Host: example.com
-User-Agent: ExampleBrowser/1.0
-Accept: */*
-
-"""
-
-response = Servy.Handler.handle(request)
-
 IO.puts(response)
 
 # When you open a website, the server receive a request right?  When you type the name google.com, a request is send from your browser to a server listening to port 80 or 443, when the site have a ssl certificat, its 443.
@@ -167,5 +163,3 @@ IO.puts(response)
 # Get it!?yep
 
 # ["GET /wildthing HTTP/1.1", "Host: example.com","User-Agent: ExampleBrowser/1.0", "Accept: */*", "", ""]
-# end
-end
