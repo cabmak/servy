@@ -137,22 +137,3 @@ name=Baloo&type=Brown
 
 response = Servy.Handler.handle(request)
 IO.puts(response)
-
-# When you open a website, the server receive a request right?  When you type the name google.com, a request is send from your browser to a server listening to port 80 or 443, when the site have a ssl certificat, its 443.
-# the request received, activate the server to return the page for you
-# GET /wildthing HTTP/1.1 => this is a command to say, get me /wildthing page and return it in HTML 1.0 format
-# Host: example.com => will be google.com for exemple...
-# User-Agent: ExampleBrowser/1.1 => this line tell the server, on witch device you want to response, if you use a phone, the server can reduce the size of the image before it send the response to you, if you have a mac, the big image will be send
-# Accept: */* => is use for internal network and security feature, not important for now..
-# obvislouly, your browser send a more complex request to the server, but you get the idea
-# The server normaly "listen" to a specific port, imagine a city, with a big wall around it, the server is the city, the wall is the router in front of it, opening specific door for specific requests
-# By convention, all the browsers and IT people agreed, port 80 and 443 will be the default HTML port, so in that city, the door 80 and 443, a security guard is there to answer question for HTML requests
-
-# watch this..
-# PING google.com (172.217.13.206)
-# Ping means, hello, the server respond with its IP, the number is the server...
-# This server/computer, listen on 80 and 443 for html request
-# This is what you are building right now... a web server
-# Get it!?yep
-
-# ["GET /wildthing HTTP/1.1", "Host: example.com","User-Agent: ExampleBrowser/1.0", "Accept: */*", "", ""]
