@@ -10,14 +10,6 @@ defmodule Servy.Handler do
 
   @doc "Transforms the request into a response."
   def handle(request) do
-    # conv = parse(request)
-    # conv = route(conv)
-    # format_response(conv)
-
-    # |> IO.inspect(label: "After Parse")
-    # |> IO.inspect(label: "Start Here")
-    # |> IO.inspect(label: "After Route")
-
     request
     |> parse()
     |> rewrite_path()
@@ -36,7 +28,7 @@ defmodule Servy.Handler do
   end
 
   # name=Baloo&type=brown
-  def route(%Conv{method: "GET", path: "/bears/" <> id} = conv) do
+  def route(%Conv{method: "GET", path: "/bears/" <> _id} = conv) do
     params = %{"name" => "baloo", "type" => "brown"}
     %{conv | status: 201, resp_body: "Created a #{params["type"]} bear named #{params["name"]}!"}
   end
@@ -65,8 +57,9 @@ defmodule Servy.Handler do
   end
 
   # def format_response(%Conv{} = conv) do
-  #   # TODO: Use values in the map to create an HTTP response string:
+  #   use values in the map to create an HTTP response string:
   # end
+
   def format_response(%Conv{} = conv) do
     """
     HTTP/1.1 #{Conv.full_status(conv)}

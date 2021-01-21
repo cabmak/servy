@@ -1,7 +1,3 @@
 defmodule Servy do
-  def hello(name) do
-    "Howdy, #{name}!"
-  end
+  @moduledoc false
 end
-
-IO.puts(Servy.hello("Elixir"))
