@@ -6,7 +6,8 @@ defmodule Servy.Parser do
 
     [request_line | _header_lines] = String.split(top, "\n")
 
-    [method, path, _] = String.split(request_line, " ")
+    [method, path, _] =
+      String.split(request_line, " ")
 
     params = parse_params(params_string)
 
