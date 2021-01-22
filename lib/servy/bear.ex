@@ -1,5 +1,4 @@
 defmodule Servy.Bear do
   @moduledoc false
-
-  defstruct test: "allo"
+  defstruct id: nil, name: "Bear", type: "", hibernating: false
 end
