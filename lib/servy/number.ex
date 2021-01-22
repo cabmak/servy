@@ -3,20 +3,15 @@ defmodule Servy.Number do
     variable_a + variable_b
   end
 
-  def div_number(coco, poulette)  do
-
+  def div_number(coco, poulette) do
     coco / poulette
-
-end
+  end
 
   def multiply_number(a, b) do
-
     a * b
   end
 
   def sub_number(ralph, john) do
-
     ralph - john
-
   end
 end
