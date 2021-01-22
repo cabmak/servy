@@ -2,6 +2,7 @@ defmodule Servy.Handler do
   @moduledoc "Handlers HTTP request."
 
   alias Servy.Conv
+  alias Servy.BearController
 
   @pages_path Path.expand("../../pages", __DIR__)
 
@@ -19,20 +20,22 @@ defmodule Servy.Handler do
     |> format_response()
   end
 
-  def route(%Conv{method: "GET", path: "/wildthings"} = conv) do
+def route(%Conv{method: "GET", path: "/wildthings"} = conv) do
     %{conv | status: 200, resp_body: "Bears, Lions, Tigers"}
   end
 
+  def route(%Conv{method: "GET", path: "/bears"} = conv) do
+   BearController.index(conv)
+  end
+
   def route(%Conv{method: "GET", path: "/bears/" <> id} = conv) do
-    %{conv | status: 200, resp_body: "Bear #{id}" }
+    params = Map.put(conv.params, "id", id)
+    BearController.show(conv, params)
   end
 
   # name=Baloo&type=brown
   def route(%Conv{method: "POST", path: "/bears/"} = conv) do
-    %{conv | status: 201, resp_body: "Created a #{params["type"]} bear named #{params["name"]}}!"
-    params = %{"name" => "Baloo", "type" => "brown"}
-     %{ conv | status: 201,
-               resp_body: "create a #{params["type"]}bear named #{params["name"]}!" }
+     BearController.create(conv, conv.params)
   end
 
   def route(%Conv{method: "GET", path: "/about"} = conv) do
