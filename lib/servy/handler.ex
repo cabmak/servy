@@ -20,12 +20,12 @@ defmodule Servy.Handler do
     |> format_response()
   end
 
-def route(%Conv{method: "GET", path: "/wildthings"} = conv) do
+  def route(%Conv{method: "GET", path: "/wildthings"} = conv) do
     %{conv | status: 200, resp_body: "Bears, Lions, Tigers"}
   end
 
   def route(%Conv{method: "GET", path: "/bears"} = conv) do
-   BearController.index(conv)
+    BearController.index(conv)
   end
 
   def route(%Conv{method: "GET", path: "/bears/" <> id} = conv) do
@@ -35,7 +35,7 @@ def route(%Conv{method: "GET", path: "/wildthings"} = conv) do
 
   # name=Baloo&type=brown
   def route(%Conv{method: "POST", path: "/bears/"} = conv) do
-     BearController.create(conv, conv.params)
+    BearController.create(conv, conv.params)
   end
 
   def route(%Conv{method: "GET", path: "/about"} = conv) do
