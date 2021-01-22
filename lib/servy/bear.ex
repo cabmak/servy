@@ -1,5 +1,5 @@
 defmodule Servy.Bear do
   @moduledoc false
-  
-  defstruct test: ""
+
+  defstruct test: "allo"
 end
