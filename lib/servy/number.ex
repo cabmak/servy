@@ -1,4 +1,6 @@
 defmodule Servy.Number do
+  @moduledoc false
+
   def add_number(variable_a, variable_b) do
     variable_a + variable_b
   end
