@@ -4,8 +4,6 @@ defmodule Servy.BearController do
   alias Servy.Bear
   alias Servy.Wildthings
 
-  # on va attendre que l'installation finisse...ok, laudio marchera pas dans ton projet, va falloir que  jele fasse a aprtir demon bord
-  # on va tester ca
   def index(conv) do
     items =
       Wildthings.list_bears()
