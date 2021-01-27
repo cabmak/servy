@@ -19,6 +19,14 @@ defmodule Servy.Wildthings do
     ]
   end
 
+  def get_bear(id) when is_integer(id) do
+    Enum.find(list_bears(), fn(b) -> b.id == id end)
+  end
+
+  def get_bear(id) when is_binary(id) do
+    id |> String.to_integer |> get_bear
+  end
+
   def get_bear_by_id(id) do
     # list_bears appele la fn en haut, ensuite Enum.find() utilise le ID pour extraire le bear avec le id whatever...
     bears = list_bears()
@@ -30,6 +38,8 @@ defmodule Servy.Wildthings do
     list_bears() |> Enum.find(fn x -> x.name == name end)
   end
 
+  # Est ce que tu vois ca? oui Good la jai plus besoin de Team Viewerok
+  # ok
   # def definitition do
   #   # [] => LIST
   #   # %{} => Map, check...
