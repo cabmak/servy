@@ -3,10 +3,9 @@ defmodule Servy.BearController do
 
   alias Servy.Bear
   alias Servy.Wildthings
-  # cool easier its magic
-  # You need to give meread/write access to terminal
 
-  # This is new, we didnt have that until last week
+  # on va attendre que l'installation finisse...ok, laudio marchera pas dans ton projet, va falloir que  jele fasse a aprtir demon bord
+  # on va tester ca
   def index(conv) do
     items =
       Wildthings.list_bears()
