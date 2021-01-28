@@ -4,15 +4,19 @@ defmodule Servy.BearController do
   alias Servy.Bear
   alias Servy.Wildthings
 
-  def index(conv) do
-    items =
-      Wildthings.list_bears()
-      |> Enum.filter(fn b -> Bear.is_grizzly(b) end)
-      |> Enum.sort(fn b1, b2 -> Bear.order_asc_by_name(b1, b2) end)
-      |> Enum.map(fn b -> bear_item(b) end)
-      |> Enum.join()
+  @templates_path Path.expand("../../templates", __DIR__)
 
-    %{conv | status: 200, resp_body: "<ul>#{items}</ul>"}
+  def index(conv) do
+    bears =
+      Wildthings.list_bears()
+      |> Enum.sort(&Bear.order_asc_by_name/2)
+
+    content =
+      @templates_path
+      |> Path.join("index.eex")
+      |> EEx.eval_file(bears: bears)
+
+    %{conv | status: 200, resp_body: content}
   end
 
   def show(conv, %{"id" => id}) do
@@ -29,7 +33,4 @@ defmodule Servy.BearController do
   # you will find the private function at the bottom
 
   ## PRIVATE FUNCTION
-  defp bear_item(bear) do
-    "<li>#{bear.name} - #{bear.type}</li>"
-  end
 end
