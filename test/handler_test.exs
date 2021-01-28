@@ -149,6 +149,6 @@ defmodule HandlerTest do
   end
 
     defp remove_whitespace(text) do
-      StringIO.replace(text, ~r{\s}, "")
+      String.replace(text, ~r{\s}, "")
     end
 end
