@@ -1,9 +1,0 @@
-<h1>All The Bears!</h1>
-
-<ul>
-  <li>Name - Brown</li>
-  <li>Name - GRizzly</li>
-  <li>Name - Polar</li>
-</ul>
-
-<%= inspect(bears) %>

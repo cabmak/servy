@@ -67,10 +67,10 @@ defmodule Servy.Handler do
 
   def format_response(%Conv{} = conv) do
     """
-    HTTP/1.1 #{Conv.full_status(conv)}
-    Content-Type: text/
-    Content-length: #{String.length(conv.resp_body)}
-
+    HTTP/1.1 #{Conv.full_status(conv)}\r
+    Content-Type: text/html\r
+    Content-length: #{String.length(conv.resp_body)}\r
+    \r
     #{conv.resp_body}
     """
   end
@@ -129,29 +129,29 @@ end
 # response = Servy.Handler.handle(request)
 # IO.puts(response)
 
-request = """
-GET /bears HTTP/1.1
-Host: example.com
-User-Agent: ExampleBrowser/1.0
-Accept: */*
-Content-Type: application/x-www-form-urlencoded
-Content-Length: 21
+# request = """
+# GET /bears HTTP/1.1\r
+# Host: example.com\r
+# User-Agent: ExampleBrowser/1.0\r
+# Accept: */*\r
+# Content-Type: application/x-www-form-urlencoded\r
+# Content-Length: 21\r
+# \r
+# name=Baloo&type=Brown
+# """
 
-name=Baloo&type=Brown
-"""
+# response = Servy.Handler.handle(request)
+# IO.puts(response)
 
-response = Servy.Handler.handle(request)
-IO.puts(response)
+# request = """
+# GET /bears/1 HTTP/1.1\r
+# Host: example.com\r
+# User-Agent: ExampleBrowser/1.0\r
+# Accept: */*\r
+# Content-Type: application/x-www-form-urlencoded\r
+# Content-Length: 21\r
+# \r
+# """
 
-request = """
-GET /bears/1 HTTP/1.1
-Host: example.com
-User-Agent: ExampleBrowser/1.0
-Accept: */*
-Content-Type: application/x-www-form-urlencoded
-Content-Length: 21
-
-"""
-
-response = Servy.Handler.handle(request)
-IO.puts(response)
+# response = Servy.Handler.handle(request)
+# IO.puts(response)

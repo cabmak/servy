@@ -11,17 +11,13 @@ defmodule Servy.BearController do
       Wildthings.list_bears()
       |> Enum.sort(&Bear.order_asc_by_name/2)
 
-    content =
-      @templates_path
-      |> Path.join("index.eex")
-      |> EEx.eval_file(bears: bears)
-
-    %{conv | status: 200, resp_body: content}
+    render(conv, "index.eex", bears: bears)
   end
 
   def show(conv, %{"id" => id}) do
     bear = Wildthings.get_bear(id)
-    %{conv | status: 200, resp_body: "<h1>Bear #{bear.id}: #{bear.name}</h1>"}
+
+    render(conv, "show.eex", bear: bear)
   end
 
   def create(conv, %{"name" => name, "type" => type} = _params) do
@@ -33,4 +29,13 @@ defmodule Servy.BearController do
   # you will find the private function at the bottom
 
   ## PRIVATE FUNCTION
+
+  defp render(conv, template, bindings \\ []) do
+    content =
+      @templates_path
+      |> Path.join(template)
+      |> EEx.eval_file(bindings)
+
+    %{conv | status: 200, resp_body: content}
+  end
 end
