@@ -69,7 +69,7 @@ defmodule Servy.Handler do
     """
     HTTP/1.1 #{Conv.full_status(conv)}\r
     Content-Type: text/html\r
-    Content-length: #{String.length(conv.resp_body)}\r
+    Content-Length: #{String.length(conv.resp_body)}\r
     \r
     #{conv.resp_body}
     """
