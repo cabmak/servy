@@ -135,7 +135,7 @@ end
 # User-Agent: ExampleBrowser/1.0\r
 # Accept: */*\r
 # Content-Type: application/x-www-form-urlencoded\r
-# Content-Length: 21\r
+# Content-Length: 102\r
 # \r
 # name=Baloo&type=Brown
 # """
