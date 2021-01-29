@@ -21,8 +21,11 @@ defmodule Servy.BearController do
   end
 
   def create(conv, %{"name" => name, "type" => type} = _params) do
-    %{conv | status: 201, resp_body: "create a #{type} bear named #{name}!"}
+    %{conv | status: 201, resp_body: "Created a #{type} bear named #{name}!"}
   end
+
+
+
 
   # By convention, defp function are put at the bottom of the module
   # Note that the code will still work, but when you work with other people
