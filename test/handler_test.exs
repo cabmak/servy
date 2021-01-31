@@ -151,7 +151,7 @@ defmodule HandlerTest do
 
   test "POST /bears/" do
     request = """
-    POST /bears/ HTTP/1.1\r
+    POST /bears HTTP/1.1\r
     Host: example.com\r
     User-Agent: ExampleBrowser/1.0\r
     Accept: */*\r
