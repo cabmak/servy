@@ -3,6 +3,7 @@ defmodule Servy.Handler do
 
   alias Servy.Conv
   alias Servy.BearController
+  alias Servy.VideoCam
 
   @pages_path Path.expand("../../pages", __DIR__)
 
@@ -18,6 +19,37 @@ defmodule Servy.Handler do
     |> route()
     |> track()
     |> format_response()
+  end
+
+  def route(%Conv{method: "POST", path: "/pledges"} = conv) do
+  Servy.PledgeController.create(conv, conv.params)
+end
+
+def route(%Conv{method: "GET", path: "/pledges"} = conv) do
+  Servy.PledgeController.index(conv)
+end
+
+  def route(%Conv{method: "GET", path: "/sensors"} = conv) do
+    task = Task.async(fn -> Servy.Tracker.get_location("bigfoot") end)
+
+    snapshots =
+      ["cam-1", "cam-2", "cam-3"]
+      |> Enum.map(&Task.async(fn -> VideoCam.get_snapshot(&1) end))
+      |> Enum.map(&Task.await/1)
+
+    where_is_bigfoot = Task.await(task)
+
+    %{conv | status: 200, resp_body: inspect({snapshots, where_is_bigfoot})}
+  end
+
+  def route(%Conv{method: "GET", path: "/kaboom"} = conv) do
+    raise "Kaboom!"
+  end
+
+  def route(%Conv{method: "GET", path: "/hibernate/" <> time} = conv) do
+    time |> String.to_integer() |> :timer.sleep()
+
+    %{conv | status: 200, resp_body: "Awake!"}
   end
 
   def route(%Conv{method: "GET", path: "/wildthings"} = conv) do
@@ -72,90 +104,10 @@ defmodule Servy.Handler do
   def format_response(%Conv{} = conv) do
     """
     HTTP/1.1 #{Conv.full_status(conv)}\r
-    Content-Type: text/html\r
+    Content-Type: #{conv.resp_content_type}\r
     Content-Length: #{String.length(conv.resp_body)}\r
     \r
     #{conv.resp_body}
     """
   end
 end
-
-# request = """
-# GET /bears HTTP/1.1
-# Host: example.com
-# User-Agent: ExampleBrowser/1.0
-# Accept: */*
-
-# """
-
-# response = Servy.Handler.handle(request)
-# IO.puts(response)
-
-# request = """
-# GET /bigfoot HTTP/1.1
-# Host: example.com
-# User-Agent: ExampleBrowser/1.0
-# Accept: */*
-
-# """
-
-# request = """
-# GET /bears/1 HTTP/1.1
-# Host: example.com
-# User-Agent: ExampleBrowser/1.0
-# Accept: */*
-
-# """
-
-# response = Servy.Handler.handle(request)
-# IO.puts(response)
-
-# request = """
-# GET /wildlife HTTP/1.1
-# Host: example.com
-# User-Agent: ExampleBrowser/1.0
-# Accept: */*
-
-# """
-
-# response = Servy.Handler.handle(request)
-
-# IO.puts(response)
-
-# request = """
-# GET /about HTTP/1.1
-# Host: example.com
-# User-Agent: ExampleBrowser/1.0
-# Accept: */*
-
-# """
-
-# response = Servy.Handler.handle(request)
-# IO.puts(response)
-
-# request = """
-# GET /bears HTTP/1.1\r
-# Host: example.com\r
-# User-Agent: ExampleBrowser/1.0\r
-# Accept: */*\r
-# Content-Type: application/x-www-form-urlencoded\r
-# Content-Length: 102\r
-# \r
-# name=Baloo&type=Brown
-# """
-
-# response = Servy.Handler.handle(request)
-# IO.puts(response)
-
-# request = """
-# GET /bears/1 HTTP/1.1\r
-# Host: example.com\r
-# User-Agent: ExampleBrowser/1.0\r
-# Accept: */*\r
-# Content-Type: application/x-www-form-urlencoded\r
-# Content-Length: 21\r
-# \r
-# """
-
-# response = Servy.Handler.handle(request)
-# IO.puts(response)
