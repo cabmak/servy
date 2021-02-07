@@ -8,10 +8,10 @@ defmodule Servy.PledgeServer do
   end
 
   # client interface
-
-  def start do
+  
+  def start_link(_we_dont_plan_to_use_this_so_we_comment_it) do
     IO.puts("Starting the pledge server...")
-    GenServer.start(__MODULE__, %State{}, name: @name)
+    GenServer.start_link(__MODULE__, %State{}, name: @name)
   end
 
   def create_pledge(name, amount) do
@@ -31,7 +31,7 @@ defmodule Servy.PledgeServer do
   end
 
   def set_cache_size(size) do
-    GenServer.cast @name, {:set_cache_size, size}
+    GenServer.cast(@name, {:set_cache_size, size})
   end
 
   # Server callbacks
@@ -40,7 +40,6 @@ defmodule Servy.PledgeServer do
     pledges = fetch_recent_pledges_from_service()
     new_state = %{state | pledges: pledges}
     {:ok, new_state}
-
   end
 
   def handle_cast(:clear, state) do
@@ -50,7 +49,6 @@ defmodule Servy.PledgeServer do
   def handle_cast({:set_cache_size, size}, state) do
     new_state = %{state | cache_size: size}
     {:noreply, new_state}
-
   end
 
   def handle_call(:total_pledged, _from, state) do
@@ -71,7 +69,7 @@ defmodule Servy.PledgeServer do
   end
 
   def handle_info(message, state) do
-    IO.puts "can't touch this! #{inspect message}"
+    IO.puts("can't touch this! #{inspect(message)}")
     {:noreply, state}
   end
 
@@ -81,35 +79,35 @@ defmodule Servy.PledgeServer do
   end
 
   defp fetch_recent_pledges_from_service do
-  # CODE GOES HERE TO FETCH RECENT PLEDGES FROM EXTERNAL SERVICE
+    # CODE GOES HERE TO FETCH RECENT PLEDGES FROM EXTERNAL SERVICE
 
-  # Example return value:
-  [ {"wilma", 15}, {"fred", 25} ]
+    # Example return value:
+    [{"wilma", 15}, {"fred", 25}]
+  end
 end
 
-end
+alias Servy.ServicesSupervisor
 
-alias Servy.PledgeServer
+# {:ok, _pid} = ServicesSupervisor.start_link()
+# {:ok, pid} = PledgeServer.start_link()
 
-{:ok, pid} = PledgeServer.start()
+# send(pid, {:stop, "hammertime"})
 
-send(pid, {:stop, "hammertime"})
+# PledgeServer.set_cache_size(4)
 
-PledgeServer.set_cache_size(4)
+# IO.inspect(PledgeServer.create_pledge("larry", 10))
 
-IO.inspect(PledgeServer.create_pledge("larry", 10))
+# # PledgeServer.clear()
 
-# PledgeServer.clear()
+# # IO.inspect(PledgeServer.create_pledge("moe", 20))
+# # IO.inspect(PledgeServer.create_pledge("curly", 30))
+# # IO.inspect(PledgeServer.create_pledge("daisy", 40))
+# # IO.inspect(PledgeServer.create_pledge("grace", 50))
 
-# IO.inspect(PledgeServer.create_pledge("moe", 20))
-# IO.inspect(PledgeServer.create_pledge("curly", 30))
-# IO.inspect(PledgeServer.create_pledge("daisy", 40))
-# IO.inspect(PledgeServer.create_pledge("grace", 50))
+# IO.inspect(PledgeServer.recent_pledges())
 
-IO.inspect(PledgeServer.recent_pledges())
+# IO.inspect(PledgeServer.total_pledged())
 
-IO.inspect(PledgeServer.total_pledged())
-
-IO.inspect(Process.info(pid, :messages))
+# IO.inspect(Process.info(pid, :messages))
 
 ## TYPO -> recent_pledges and total_pledges, also response not responce...
